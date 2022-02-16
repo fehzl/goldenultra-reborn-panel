@@ -7,9 +7,10 @@ export default NextAuth({
       name: `credentials`,
       credentials: {},
 
-      async authorize() {
+      async authorize(credentials: any) {
+        console.log(credentials);
         const user = { id: `123`, name: `John Doe` };
-        if (user) return user;
+        if (credentials?.email === `Felipe`) return user;
         return null;
       },
     }),
