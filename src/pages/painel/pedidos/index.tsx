@@ -1,5 +1,3 @@
-import { RemoteLoadOrderList } from '@/data/usecases';
-import { AxiosHttpClientAdapter } from '@/infra/http/axios-http-client-adapter';
 import Link from 'next/link';
 import { useState } from 'react';
 import { BiFilter, BiPrinter, BiShoppingBag } from 'react-icons/bi';
@@ -89,9 +87,7 @@ export default function Orders() {
             </div>
             <div
               className="flex flex-row space-x-2 items-center text-gray-500 cursor-pointer"
-              onClick={() => {
-                console.log(selecteds);
-              }}
+              onClick={() => ({})}
             >
               <BiPrinter className="text-xl" />
               <span className="text-sm">Exportar</span>

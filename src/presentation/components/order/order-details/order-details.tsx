@@ -1,5 +1,4 @@
 import { RemoteOrderModel } from '@/data/models/remote-order-model';
-import { Order } from '@/types';
 import {
   enumStatusToString,
   utcToLocal,

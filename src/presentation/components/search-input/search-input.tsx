@@ -6,11 +6,7 @@ interface Props extends React.InputHTMLAttributes<HTMLInputElement> {
   options: any;
 }
 
-export function SearchInput({
-  label,
-  options = [1, 2, 3],
-  error = null,
-}: Props) {
+export function SearchInput({ options = [1, 2, 3] }: Props) {
   return (
     <form className="w-full">
       <div className="flex flex-row">

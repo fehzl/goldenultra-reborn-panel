@@ -52,10 +52,10 @@ export function OrderItems({
           </div>
           {!hideActions && (
             <div className="pr-3 space-x-1 flex items-center justify-center w-20">
-              <button onClick={() => console.log(`rem`)}>
+              <button onClick={() => ({})}>
                 <FiEdit className="text-blue-300 hover:text-blue-400 text-[17px]" />
               </button>
-              <button onClick={() => console.log(`del`)}>
+              <button onClick={() => ({})}>
                 <FiTrash className="text-red-300 hover:text-red-400 text-[17px]" />
               </button>
             </div>

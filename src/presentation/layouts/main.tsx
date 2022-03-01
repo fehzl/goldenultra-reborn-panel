@@ -7,7 +7,7 @@ interface MainLayoutProps {
 }
 
 export default function MainLayout({ children }: MainLayoutProps) {
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   return (
     <div className="flex divide-x overflow-hidden max-h-screen divide-slate-300 flex-row min-h-screen bg-gray-100 text-gray-800">

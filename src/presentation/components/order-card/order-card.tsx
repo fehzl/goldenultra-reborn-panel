@@ -1,7 +1,6 @@
 import { RemoteLoadOrderList } from '@/data/usecases';
 import {
   enumStatusToString,
-  numberToBrazilianReal,
   utcToLocal,
 } from '@/presentation/utils/formatters';
 
@@ -23,7 +22,7 @@ export default function OrderCard({ order }: Props) {
         </div>
         <div className="flex flex-col">
           <span className="text-gray-400 text-sm">Responsável</span>
-          <div className="text-gray-600">{order.employee.email}</div>
+          <div className="text-gray-600">{order.employee.name}</div>
         </div>
         <div className="flex flex-col">
           <span className="text-gray-400 text-sm">Situação</span>

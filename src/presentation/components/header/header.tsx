@@ -1,6 +1,4 @@
 import { Session } from 'next-auth';
-import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
 
 export interface HeaderProps {
   session: Session;

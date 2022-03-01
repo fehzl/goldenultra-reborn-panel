@@ -8,7 +8,7 @@ interface Props {
   setClient: (client: any) => void;
 }
 
-export function OrderClientForm({ client, setClient }: Props) {
+export function OrderClientForm({ setClient }: Props) {
   const httpClient = new AxiosHttpClientAdapter();
   const url = `http://localhost:3333/api/v1/clients`;
   const remoteLoadClientList = new RemoteLoadClientList(url, httpClient);

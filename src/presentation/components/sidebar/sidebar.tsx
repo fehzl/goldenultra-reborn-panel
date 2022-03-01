@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { BiBox, BiDetail, BiHomeAlt, BiShoppingBag } from 'react-icons/bi';
+import { BiBox, BiHomeAlt, BiShoppingBag } from 'react-icons/bi';
 import { AiOutlineUser } from 'react-icons/ai';
 export default function Sidebar() {
   const router = useRouter();

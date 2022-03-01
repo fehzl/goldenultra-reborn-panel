@@ -16,7 +16,7 @@ export default function PrintOrder() {
   const url = `http://localhost:3333/api/v1/orders/${routerCode}`;
   const remoteLoadOrder = new RemoteLoadOrder(url, httpClient);
 
-  const { data, isLoading, isFetching } = useQuery(
+  const { data } = useQuery(
     [`order`, routerCode],
     async () => await remoteLoadOrder.load(routerCode as string),
   );
