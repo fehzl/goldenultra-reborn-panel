@@ -9,11 +9,10 @@ import {
   numberToBrazilianReal,
   utcToLocal,
 } from '@/presentation/utils/formatters';
+import { makeRemoteLoadOrderList } from '@/main/factories/usecases';
 
 export default function Orders() {
-  const httpClient = new AxiosHttpClientAdapter();
-  const url = `http://localhost:3333/api/v1/orders`;
-  const remoteLoadOrderList = new RemoteLoadOrderList(url, httpClient);
+  const remoteLoadOrderList = makeRemoteLoadOrderList();
 
   const { isLoading, data, isFetching } = useQuery(
     [`orders`],
