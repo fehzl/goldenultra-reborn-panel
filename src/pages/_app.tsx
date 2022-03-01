@@ -1,18 +1,24 @@
 import { AppProps } from 'next/app';
-import '@/styles/global.css';
+import '@/presentation/styles/global.css';
 import { SessionProvider } from 'next-auth/react';
-import MainLayout from '@/layouts/main';
+import MainLayout from '@/presentation/layouts/main';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { useRouter } from 'next/router';
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
+  const router = useRouter();
 
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={pageProps.session}>
-        <MainLayout>
+        {!router.pathname.startsWith(`/painel/pedidos/i/`) ? (
+          <MainLayout>
+            <Component {...pageProps} />
+          </MainLayout>
+        ) : (
           <Component {...pageProps} />
-        </MainLayout>
+        )}
       </SessionProvider>
     </QueryClientProvider>
   );

@@ -1,33 +1,26 @@
+import { RemoteLoadDevice } from '@/data/usecases';
+import { AxiosHttpClientAdapter } from '@/infra/http/axios-http-client-adapter';
 import {
   numberToBrazilianReal,
   numberToBrazilianUnit,
   numberToBrazilianWeight,
-} from '@/utils/formatters';
-import axios from 'axios';
+} from '@/presentation/utils/formatters';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { BiBox, BiHash } from 'react-icons/bi';
 import { useQuery } from 'react-query';
-import { Device } from '..';
-
-type AxiosDeviceResponse = {
-  httpCode: number;
-  message: string;
-  data: Device;
-};
 
 export default function ShowItem() {
   const router = useRouter();
   const { alias: routerAlias } = router.query;
 
-  const fetchDevice = async () =>
-    await axios.get<AxiosDeviceResponse>(
-      `http://localhost:3333/api/v1/devices/${routerAlias}`,
-    );
+  const httpClient = new AxiosHttpClientAdapter();
+  const url = `http://localhost:3333/api/v1/devices/${routerAlias}`;
+  const remoteLoadDevice = new RemoteLoadDevice(url, httpClient);
 
   const { data, isLoading, isFetching } = useQuery(
     [`device`, routerAlias],
-    () => fetchDevice(),
+    async () => await remoteLoadDevice.load(routerAlias as string),
   );
 
   return (
@@ -35,13 +28,11 @@ export default function ShowItem() {
       <div className="flex pt-4 pb-8 flex-row justify-between items-center">
         <div className="flex space-x-2 items-center flex-row text-gray-500">
           <BiBox className="text-2xl" />
-          <span className="text-md">
-            {data?.data.data !== null && data?.data.data.code}
-          </span>
+          <span className="text-md">{data?.code}</span>
         </div>
         <div className="flex space-x-2 items-center flex-row text-gray-300">
           <BiHash className="text-2xl" />
-          <span className="text-md">{data?.data.data.id}</span>
+          <span className="text-md">{data?.id}</span>
         </div>
       </div>
       <div className="rounded-xl">
@@ -74,11 +65,11 @@ export default function ShowItem() {
               </div>
             </div> */}
             <div className="flex w-44 h-44 bg-white rounded-full items-center justify-center">
-              {data?.data.data.images && (
+              {data?.images && (
                 <div>
                   <Image
                     alt="item"
-                    src={data.data.data.images}
+                    src={data?.images}
                     layout="intrinsic"
                     width={120}
                     height={120}
@@ -95,7 +86,7 @@ export default function ShowItem() {
                     Descrição de Exibição
                   </span>
                   <span className="text-md text-gray-600">
-                    {data?.data.data.exhibition_description}
+                    {data?.exhibition_description}
                   </span>
                 </div>
                 <div className="flex flex-col space-y-1">
@@ -103,7 +94,7 @@ export default function ShowItem() {
                     Descrição Detalhada
                   </span>
                   <span className="text-md text-gray-600">
-                    {data?.data.data.detailed_description}
+                    {data?.detailed_description}
                   </span>
                 </div>
               </div>
@@ -114,7 +105,7 @@ export default function ShowItem() {
                     Unidades em uma Caixa
                   </span>
                   <span className="text-md text-gray-600">
-                    {numberToBrazilianUnit(data?.data.data.un_in_a_box)}
+                    {numberToBrazilianUnit(data?.un_in_a_box)}
                   </span>
                 </div>
                 <div className="flex flex-col space-y-1">
@@ -122,7 +113,7 @@ export default function ShowItem() {
                     Peso
                   </span>
                   <span className="text-md text-gray-600">
-                    {numberToBrazilianWeight(data?.data.data.net_weight)}
+                    {numberToBrazilianWeight(data?.net_weight)}
                   </span>
                 </div>
                 <div className="flex flex-col space-y-1">
@@ -130,7 +121,7 @@ export default function ShowItem() {
                     Peso Líquido
                   </span>
                   <span className="text-md text-gray-600">
-                    {numberToBrazilianWeight(data?.data.data.gross_weight)}
+                    {numberToBrazilianWeight(data?.gross_weight)}
                   </span>
                 </div>
               </div>
@@ -141,7 +132,7 @@ export default function ShowItem() {
                     Preço da Unidade
                   </span>
                   <span className="text-md text-gray-600">
-                    {numberToBrazilianReal(data?.data.data.un_price)}
+                    {numberToBrazilianReal(data?.un_price)}
                   </span>
                 </div>
                 <div className="flex flex-col space-y-1">
@@ -149,7 +140,7 @@ export default function ShowItem() {
                     Preço da Caixa
                   </span>
                   <span className="text-md text-gray-600">
-                    {numberToBrazilianReal(data?.data.data.box_price)}
+                    {numberToBrazilianReal(data?.box_price)}
                   </span>
                 </div>
               </div>
@@ -160,9 +151,7 @@ export default function ShowItem() {
                     Disponíveis na loja
                   </span>
                   <span className="text-md text-gray-600">
-                    {numberToBrazilianUnit(
-                      data?.data.data.un_avaliable_to_sell,
-                    )}
+                    {numberToBrazilianUnit(data?.un_avaliable_to_sell)}
                   </span>
                 </div>
               </div>

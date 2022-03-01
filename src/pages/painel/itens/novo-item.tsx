@@ -1,4 +1,4 @@
-import TextInput from '@/components/text-input/text-input';
+import TextInput from '@/presentation/components/text-input/text-input';
 
 export default function NewItem() {
   return (

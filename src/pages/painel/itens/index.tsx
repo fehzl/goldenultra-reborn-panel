@@ -1,55 +1,29 @@
-import ItemsCard from '@/components/items-card/items-card';
-import axios from 'axios';
+import ItemsCard from '@/presentation/components/items-card/items-card';
+import { RemoteLoadDeviceList } from '@/data/usecases';
+import { AxiosHttpClientAdapter } from '@/infra/http/axios-http-client-adapter';
 import Link from 'next/link';
 import { useState } from 'react';
 import {
   BiBox,
   BiEditAlt,
   BiFilter,
-  BiPlus,
   BiSearch,
   BiTrashAlt,
 } from 'react-icons/bi';
 import { useQuery } from 'react-query';
 
-export type Device = {
-  id: string;
-  alias: string;
-  code: string;
-  un_in_a_box: number;
-  net_weight: number;
-  gross_weight: number;
-  exhibition_description: string;
-  detailed_description: string;
-  images: string;
-  available_to_sell: boolean;
-  un_price: number;
-  box_price: number;
-  un_avaliable_to_sell: number;
-  group_id: string;
-  created_at: Date;
-  updated_at: Date;
-};
-
-type AxiosDevicesResponse = {
-  httpCode: number;
-  message: string;
-  data: Device[];
-};
-
 export default function Items() {
+  const httpClient = new AxiosHttpClientAdapter();
+  const url = `http://localhost:3333/api/v1/devices`;
+  const remoteLoadDeviceList = new RemoteLoadDeviceList(url, httpClient);
+
   const [showAvailable, setShowAvailable] = useState<boolean>(true);
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [search, setSearch] = useState<string>(``);
 
-  const fetchDevices = async (showAvaliable = true, search = ``) =>
-    await axios.get<AxiosDevicesResponse>(
-      `http://localhost:3333/api/v1/devices?search=${search}&availableToSell=${showAvaliable}&limit=18`,
-    );
-
   const { isLoading, data, isFetching } = useQuery(
     [`devices`, showAvailable, search],
-    () => fetchDevices(showAvailable, search),
+    () => remoteLoadDeviceList.loadAll({ showAvailable, search, limit: 15 }),
     { keepPreviousData: true },
   );
 
@@ -135,7 +109,7 @@ export default function Items() {
         ) : (
           <div className="transition-transform duration-150 ease-in px-12 py-12">
             <div className="grid grid-cols-6 sm:grid-cols-3 lg:grid-cols-5 gap-12">
-              {data?.data.data.map((device) => (
+              {data?.map((device) => (
                 <Link key={device.id} href={`itens/i/${device.alias}`} passHref>
                   <a>
                     <ItemsCard key={device.id} device={device} />

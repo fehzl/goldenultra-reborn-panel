@@ -1,27 +1,25 @@
-import { OrderClient, OrderDetails, OrderItems } from '@/components/order';
-import { Order } from '@/types';
-import axios from 'axios';
+import {
+  OrderClient,
+  OrderDetails,
+  OrderItems,
+} from '@/presentation/components/order';
+import { RemoteLoadOrder } from '@/data/usecases';
+import { AxiosHttpClientAdapter } from '@/infra/http/axios-http-client-adapter';
 import { useRouter } from 'next/router';
-import { BiBox, BiEditAlt, BiFilter, BiHash, BiPrinter } from 'react-icons/bi';
+import { BiBox, BiEditAlt, BiHash, BiPrinter } from 'react-icons/bi';
 import { useQuery } from 'react-query';
-
-type AxiosOrderResponse = {
-  httpCode: number;
-  message: string;
-  data: Order;
-};
 
 export default function ShowOrder() {
   const router = useRouter();
   const { code: routerCode } = router.query;
 
-  const fetchOrder = async () =>
-    await axios.get<AxiosOrderResponse>(
-      `http://localhost:3333/api/v1/orders/${routerCode}`,
-    );
+  const httpClient = new AxiosHttpClientAdapter();
+  const url = `http://localhost:3333/api/v1/orders/${routerCode}`;
+  const remoteLoadOrder = new RemoteLoadOrder(url, httpClient);
 
-  const { data, isLoading, isFetching } = useQuery([`order`, routerCode], () =>
-    fetchOrder(),
+  const { data, isLoading, isFetching } = useQuery(
+    [`order`, routerCode],
+    async () => await remoteLoadOrder.load(routerCode as string),
   );
 
   return (
@@ -29,13 +27,11 @@ export default function ShowOrder() {
       <div className="flex pt-4 pb-8 flex-row justify-between items-center">
         <div className="flex space-x-2 items-center flex-row text-gray-500">
           <BiBox className="text-2xl" />
-          <span className="text-md">
-            {data?.data.data !== null && data?.data.data.code}
-          </span>
+          <span className="text-md">{data?.code}</span>
         </div>
         <div className="flex space-x-2 items-center flex-row text-gray-300">
           <BiHash className="text-2xl" />
-          <span className="text-md">{data?.data.data.id}</span>
+          <span className="text-md">{data?.id}</span>
         </div>
       </div>
       <div className="rounded-xl border-2 border-gray-200 bg-white">
@@ -56,10 +52,6 @@ export default function ShowOrder() {
           </div>
           <div className="flex flex-row space-x-6">
             <div className="flex flex-row space-x-2 items-center text-gray-500 cursor-pointer">
-              <BiFilter className="text-xl" />
-              <span className="text-sm">Filtros</span>
-            </div>
-            <div className="flex flex-row space-x-2 items-center text-gray-500 cursor-pointer">
               <BiEditAlt className="text-xl" />
               <span className="text-sm">Editar</span>
             </div>
@@ -77,11 +69,13 @@ export default function ShowOrder() {
           </div>
         ) : (
           <div className="transition-transform duration-150 ease-in px-12 py-12 space-y-12">
-            {data?.data.data && (
+            {data && (
               <>
-                <OrderDetails order={data?.data.data} />
-                <OrderClient client={data?.data.data.client} />
-                <OrderItems items={data?.data.data.orderItems} hideActions />
+                <OrderDetails order={data} />
+                <OrderClient client={data.client} />
+                <div className="px-12 py-4 border-2 rounded-xl bg-gray-50 border-gray-200 border-dotted">
+                  <OrderItems items={data.items} hideActions />
+                </div>
               </>
             )}
           </div>
