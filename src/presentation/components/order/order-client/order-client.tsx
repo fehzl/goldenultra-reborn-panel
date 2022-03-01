@@ -1,8 +1,7 @@
-import { RemoteOrderClientModel } from '@/data/models/remote-order-model';
-import { Client } from '@/types';
+import { RemoteClientModel } from '@/data/models';
 
 interface OrderClientDetailsProps {
-  client: RemoteOrderClientModel;
+  client: RemoteClientModel;
 }
 
 export function OrderClient({ client }: OrderClientDetailsProps) {
