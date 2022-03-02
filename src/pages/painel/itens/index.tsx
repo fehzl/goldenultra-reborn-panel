@@ -1,6 +1,4 @@
 import ItemsCard from '@/presentation/components/items-card/items-card';
-import { RemoteLoadDeviceList } from '@/data/usecases';
-import { AxiosHttpClientAdapter } from '@/infra/http/axios-http-client-adapter';
 import Link from 'next/link';
 import { useState } from 'react';
 import {
@@ -11,11 +9,11 @@ import {
   BiTrashAlt,
 } from 'react-icons/bi';
 import { useQuery } from 'react-query';
+import { PageHeader } from '@/presentation/components/page-header';
+import { makeRemoteLoadDeviceList } from '@/main/factories/usecases';
 
 export default function Items() {
-  const httpClient = new AxiosHttpClientAdapter();
-  const url = `http://localhost:3333/api/v1/devices`;
-  const remoteLoadDeviceList = new RemoteLoadDeviceList(url, httpClient);
+  const remoteLoadDeviceList = makeRemoteLoadDeviceList();
 
   const [showAvailable, setShowAvailable] = useState<boolean>(true);
   const [showSearch, setShowSearch] = useState<boolean>(false);
@@ -28,18 +26,14 @@ export default function Items() {
   );
 
   return (
-    <div className="px-12">
-      <div className="flex pt-4 pb-8 flex-row justify-between items-center">
-        <div className="flex space-x-2 items-center flex-row text-gray-500">
-          <BiBox className="text-2xl" />
-          <span className="text-md">Itens</span>
-        </div>
-        <button className="flex flex-row text-sm items-center justify-around px-2 py-1 bg-green-400 hover:bg-green-300 transition-all ease-in duration-100 rounded-full text-white w-36 h-10">
-          <Link href="/painel/itens/novo-item" passHref>
-            <span className="font-bold">Novo Item</span>
-          </Link>
-        </button>
-      </div>
+    <div>
+      <PageHeader
+        type="title-link"
+        titleIcon={<BiBox />}
+        titleText="Itens"
+        linkHref="/painel/itens/novo-item"
+        linkText="Novo"
+      />
       <div className="rounded-xl border-2 border-gray-200 bg-white">
         <div className="px-12 flex flex-row h-20 items-center justify-between rounded-t-xl border-b-2 border-gray-200">
           <div className="flex flex-row items-center space-x-4 h-full">
