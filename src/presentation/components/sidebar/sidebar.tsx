@@ -41,7 +41,7 @@ export default function Sidebar() {
                 className={`flex flex-row items-center h-10 px-3 rounded-lg ${
                   activeRoute === path.path
                     ? `bg-green-500 text-green-50`
-                    : `text-green-500 hover:bg-green-50 hover:text-green-500`
+                    : `text-green-500 hover:bg-green-500 hover:text-green-50`
                 }`}
               >
                 <span className="flex items-center justify-center text-lg">
@@ -69,8 +69,8 @@ export default function Sidebar() {
   }, [router]);
 
   return (
-    <aside className="w-22 transform -translate-x-full md:translate-x-0 transition-transform duration-150 ease-in bg-gray-100 max-w-screen flex justify-center items-center">
-      <div className="sidebar-content px-4 py-6">
+    <aside className="px-4 transition-transform duration-150 ease-in bg-gray-100 max-w-screen flex justify-center items-center">
+      <div className="sidebar-content">
         <ul className="flex flex-col w-full space-y-2">{renderPaths()}</ul>
       </div>
     </aside>
