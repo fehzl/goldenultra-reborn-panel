@@ -60,3 +60,18 @@ export function utcToLocal(date: Date | string): string {
     minute: `2-digit`,
   });
 }
+
+export function toTitleCase(str: string): string {
+  return str.replace(
+    /\w\S*/g,
+    (txt) => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase(),
+  );
+}
+
+export function stringOrNumberToDottedFloat(value: string | number): number {
+  if (typeof value === `string`) {
+    return parseFloat(value.replace(/,/g, `.`));
+  }
+
+  return value;
+}
