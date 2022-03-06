@@ -35,7 +35,7 @@ export function PageWrapper({
             <div>Carregando...</div>
           </div>
         ) : (
-          <div className="rounded-xl border-2 border-gray-200 bg-white">
+          <div className="rounded-xl border-2 mb-8 border-gray-200 bg-white">
             <div className="px-9 flex flex-row h-20 items-center justify-between rounded-t-xl border-b-2 border-gray-200">
               <div className="flex flex-row items-center space-x-4 h-full">
                 {sections.map((section) => (
