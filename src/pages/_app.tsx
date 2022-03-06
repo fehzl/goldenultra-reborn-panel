@@ -12,7 +12,8 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={pageProps.session}>
-        {!router.pathname.startsWith(`/painel/pedidos/i/`) ? (
+        {!router.pathname.startsWith(`/painel/pedidos/i/`) &&
+        router.pathname.match(`/painel`) ? (
           <MainLayout>
             <Component {...pageProps} />
           </MainLayout>
