@@ -10,12 +10,12 @@ export default NextAuth({
 
       async authorize(credentials: any) {
         const response = await axios.post(
-          `http://localhost:3333/api/v1/login`,
+          `http://132.226.243.30:3333/api/v1/login`,
           credentials,
         );
 
         if (response.data.httpCode === 200) {
-          return { ...response.data.data.user, jwt: response.data.data.jwt };
+          return { ...response.data.body.user, jwt: response.data.body.jwt };
         } else {
           return null;
         }

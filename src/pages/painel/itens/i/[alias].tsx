@@ -1,5 +1,6 @@
 import { RemoteLoadDevice } from '@/data/usecases';
 import { AxiosHttpClientAdapter } from '@/infra/http/axios-http-client-adapter';
+import { PageHeader } from '@/presentation/components/shared/page/header';
 import {
   numberToBrazilianReal,
   numberToBrazilianUnit,
@@ -15,7 +16,7 @@ export default function ShowItem() {
   const { alias: routerAlias } = router.query;
 
   const httpClient = new AxiosHttpClientAdapter();
-  const url = `http://localhost:3333/api/v1/devices/${routerAlias}`;
+  const url = `http://132.226.243.30:3333/api/v1/devices/${routerAlias}`;
   const remoteLoadDevice = new RemoteLoadDevice(url, httpClient);
 
   const { data, isLoading, isFetching } = useQuery(
@@ -24,17 +25,14 @@ export default function ShowItem() {
   );
 
   return (
-    <div className="px-12">
-      <div className="flex pt-4 pb-8 flex-row justify-between items-center">
-        <div className="flex space-x-2 items-center flex-row text-gray-500">
-          <BiBox className="text-2xl" />
-          <span className="text-md">{data?.code}</span>
-        </div>
-        <div className="flex space-x-2 items-center flex-row text-gray-300">
-          <BiHash className="text-2xl" />
-          <span className="text-md">{data?.id}</span>
-        </div>
-      </div>
+    <div>
+      <PageHeader
+        type="title-subtitle"
+        titleIcon={<BiBox />}
+        titleText="Pedidos"
+        subtitleIcon={<BiHash />}
+        subtitleText={data?.id}
+      />
       <div className="rounded-xl">
         {isLoading && isFetching ? (
           <div>loading</div>

@@ -13,7 +13,7 @@ export default function PrintOrder() {
   const { code: routerCode } = router.query;
 
   const httpClient = new AxiosHttpClientAdapter();
-  const url = `http://localhost:3333/api/v1/orders/${routerCode}`;
+  const url = `http://132.226.243.30:3333/api/v1/orders/${routerCode}`;
   const remoteLoadOrder = new RemoteLoadOrder(url, httpClient);
 
   const { data } = useQuery(
@@ -39,7 +39,7 @@ export default function PrintOrder() {
         <div className="w-1/3 flex justify-end">
           <QRCode
             size={100}
-            value={`http://localhost:3000/painel/pedidos/p/${data?.code}`}
+            value={`http://132.226.243.30:3000/painel/pedidos/p/${data?.code}`}
           />
         </div>
       </div>

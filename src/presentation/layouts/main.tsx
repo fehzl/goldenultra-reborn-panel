@@ -1,5 +1,5 @@
-import Header from '@/presentation/components/header/header';
-import Sidebar from '@/presentation/components/sidebar/sidebar';
+import Header from '@/presentation/components/shared/header/header';
+import Sidebar from '@/presentation/components/shared/sidebar/sidebar';
 import { useSession } from 'next-auth/react';
 
 interface MainLayoutProps {

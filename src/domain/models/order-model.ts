@@ -18,6 +18,7 @@ export type OrderItemModel = {
   id: string;
   device: OrderItemDeviceModel;
   quantity: number;
+  device_price: number;
   price: number;
 };
 

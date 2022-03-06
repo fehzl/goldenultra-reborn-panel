@@ -1,4 +1,3 @@
-import ItemsCard from '@/presentation/components/items-card/items-card';
 import Link from 'next/link';
 import { useState } from 'react';
 import {
@@ -9,8 +8,9 @@ import {
   BiTrashAlt,
 } from 'react-icons/bi';
 import { useQuery } from 'react-query';
-import { PageHeader } from '@/presentation/components/page-header';
+import { PageHeader } from '@/presentation/components/shared/page/header';
 import { makeRemoteLoadDeviceList } from '@/main/factories/usecases';
+import ItemsCard from '@/presentation/components/device/card/device/items-card';
 
 export default function Items() {
   const remoteLoadDeviceList = makeRemoteLoadDeviceList();

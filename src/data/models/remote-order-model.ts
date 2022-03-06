@@ -18,6 +18,7 @@ export type RemoteOrderItemModel = {
   id: string;
   device: RemoteOrderItemDeviceModel;
   quantity: number;
+  device_price: number;
   price: number;
 };
 

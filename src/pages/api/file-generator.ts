@@ -10,7 +10,7 @@ const handle = async (request: NextApiRequest, res: NextApiResponse) => {
       args: [`--no-sandbox`, `--disable-setuid-sandbox`],
     });
     const page = await browser.newPage();
-    await page.goto(`http://localhost:3000/painel/pedidos/i/${code}`);
+    await page.goto(`http://132.226.243.30:3000/painel/pedidos/i/${code}`);
     const pdf = await page.pdf({
       format: `a4`,
       printBackground: true,

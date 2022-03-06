@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { BiFilter, BiPrinter, BiShoppingBag } from 'react-icons/bi';
 import { useQuery } from 'react-query';
 import { makeRemoteLoadOrderList } from '@/main/factories/usecases';
-import { PageHeader } from '@/presentation/components/page-header';
-import { PageWrapper } from '@/presentation/components/page-wrapper';
+import { PageHeader } from '@/presentation/components/shared/page/header';
+import { PageWrapper } from '@/presentation/components/shared/page/wrapper';
 import { OrderList } from '@/presentation/components/order';
 
 export default function Orders() {

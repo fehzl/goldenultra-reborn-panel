@@ -4,6 +4,6 @@ module.exports = {
     domains: ['res.cloudinary.com'],
   },
   env: {
-    API_URL: 'http://localhost:3333/api/v1',
+    API_URL: 'http://132.226.243.30:3333/api/v1',
   },
 };

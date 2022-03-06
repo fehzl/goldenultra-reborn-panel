@@ -1,4 +1,3 @@
-export * from './order-client/index';
-export * from './order-details/index';
-export * from './order-items/index';
-export * from './order-list';
+export * from './card';
+export * from './data-entry';
+export * from './list';

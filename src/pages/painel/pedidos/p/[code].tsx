@@ -1,21 +1,29 @@
-import {
-  OrderClient,
-  OrderDetails,
-  OrderItems,
-} from '@/presentation/components/order';
 import { RemoteLoadOrder } from '@/data/usecases';
 import { AxiosHttpClientAdapter } from '@/infra/http/axios-http-client-adapter';
 import { useRouter } from 'next/router';
-import { BiBox, BiEditAlt, BiHash, BiPrinter } from 'react-icons/bi';
+import { BiHash, BiShoppingBag } from 'react-icons/bi';
 import { useQuery } from 'react-query';
+import { PageHeader } from '@/presentation/components/shared/page/header';
+import { PageWrapper } from '@/presentation/components/shared/page/wrapper';
+import {
+  OrderClientCard,
+  OrderDetailsCard,
+  OrderItemList,
+} from '@/presentation/components/order';
 
 export default function ShowOrder() {
   const router = useRouter();
   const { code: routerCode } = router.query;
 
   const httpClient = new AxiosHttpClientAdapter();
-  const url = `http://localhost:3333/api/v1/orders/${routerCode}`;
+  const url = `http://132.226.243.30:3333/api/v1/orders/${routerCode}`;
   const remoteLoadOrder = new RemoteLoadOrder(url, httpClient);
+
+  const sections = [
+    { name: `Detalhes`, activeColor: `text-green-500` },
+    { name: `Pagamentos`, activeColor: `text-orange-400` },
+    { name: `Finalizados`, activeColor: `text-red-400` },
+  ];
 
   const { data, isLoading, isFetching } = useQuery(
     [`order`, routerCode],
@@ -23,64 +31,25 @@ export default function ShowOrder() {
   );
 
   return (
-    <div className="px-12">
-      <div className="flex pt-4 pb-8 flex-row justify-between items-center">
-        <div className="flex space-x-2 items-center flex-row text-gray-500">
-          <BiBox className="text-2xl" />
-          <span className="text-md">{data?.code}</span>
+    <>
+      <PageHeader
+        type="title-subtitle"
+        titleIcon={<BiShoppingBag />}
+        titleText={data?.code || ``}
+        subtitleIcon={<BiHash />}
+        subtitleText={data?.id}
+      />
+      <PageWrapper loading={isLoading || isFetching} sections={sections}>
+        <div className="flex flex-col space-y-10 px-9">
+          {data && (
+            <>
+              <OrderDetailsCard order={data} />
+              <OrderClientCard client={data.client} />
+              <OrderItemList items={data.items} />
+            </>
+          )}
         </div>
-        <div className="flex space-x-2 items-center flex-row text-gray-300">
-          <BiHash className="text-2xl" />
-          <span className="text-md">{data?.id}</span>
-        </div>
-      </div>
-      <div className="rounded-xl border-2 border-gray-200 bg-white">
-        <div className="px-12 flex flex-row h-20 items-center justify-between rounded-t-xl border-b-2 border-gray-200">
-          <div className="flex flex-row items-center space-x-4 h-full">
-            <div className="cursor-pointer text-sm font-normal text-green-500">
-              <button>Detalhes</button>
-            </div>
-            <div className="cursor-pointer text-sm font-normal text-gray-500">
-              <button>Pagamento</button>
-            </div>
-            <div className="cursor-pointer text-sm font-normal text-gray-500">
-              <button>Separação</button>
-            </div>
-            <div className="cursor-pointer text-sm font-normal text-gray-500">
-              <button>Histórico</button>
-            </div>
-          </div>
-          <div className="flex flex-row space-x-6">
-            <div className="flex flex-row space-x-2 items-center text-gray-500 cursor-pointer">
-              <BiEditAlt className="text-xl" />
-              <span className="text-sm">Editar</span>
-            </div>
-            <div className="flex flex-row space-x-2 items-center text-gray-500 cursor-pointer">
-              <BiPrinter className="text-xl" />
-              <span className="text-sm">Exportar</span>
-            </div>
-          </div>
-        </div>
-        {isLoading && isFetching ? (
-          <div className="px-12 py-12 text-center">
-            <div className="spinner-border text-gray-500" role="status">
-              <span className="sr-only">Loading...</span>
-            </div>
-          </div>
-        ) : (
-          <div className="transition-transform duration-150 ease-in px-12 py-12 space-y-12">
-            {data && (
-              <>
-                <OrderDetails order={data} />
-                <OrderClient client={data.client} />
-                <div className="px-12 py-4 border-2 rounded-xl bg-gray-50 border-gray-200 border-dotted">
-                  <OrderItems items={data.items} hideActions />
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-    </div>
+      </PageWrapper>
+    </>
   );
 }
