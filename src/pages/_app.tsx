@@ -5,8 +5,9 @@ import MainLayout from '@/presentation/layouts/main';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import { useRouter } from 'next/router';
 
+export const queryClient = new QueryClient();
+
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient();
   const router = useRouter();
 
   return (
