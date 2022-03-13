@@ -221,6 +221,7 @@ export function OrderItemList({
                             <>
                               <CurrencyInput
                                 defaultValue={item.price}
+                                type="table"
                                 handleValue={(
                                   value: number | null | undefined,
                                 ) => {
