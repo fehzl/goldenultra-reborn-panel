@@ -27,9 +27,11 @@ export function numberToBrazilianUnit(value: number | undefined): string {
 
 export function enumStatusToString(status: string | undefined): string {
   switch (status) {
-    case `new`:
-      return `Novo`;
-    case `paid`:
+    case `PENDING`:
+      return `Pendente`;
+    case `PAID_PARTIAL`:
+      return `Pago Parcial`;
+    case `PAID`:
       return `Pago`;
     case `in_separation`:
       return `Separação`;
@@ -74,4 +76,26 @@ export function stringOrNumberToDottedFloat(value: string | number): number {
   }
 
   return value;
+}
+
+export function stringToBrazilianPhoneNumber(value: string): string {
+  if (!value) return ``;
+
+  // format to (xx) x xxxx xxxx
+  return value
+    .replace(/\D/g, ``)
+    .replace(/(\d{2})(\d{1})(\d{4})(\d{4})/, `$1 $2 $3 $4`);
+}
+
+export function enumPhoneTypeToString(type: string): string {
+  switch (type) {
+    case `mobile`:
+      return `Celular`;
+    case `home`:
+      return `Residencial`;
+    case `work`:
+      return `Comercial`;
+    default:
+      return `Não definido`;
+  }
 }

@@ -19,7 +19,7 @@ export function OrderDetailsCard({ order }: OrderDetailsProps) {
           <div className="flex flex-row space-x-1">
             <span className="text-gray-600">Situação:</span>
             <span className="text-gray-500">
-              {enumStatusToString(order.status)}
+              {enumStatusToString(order.situation)}
             </span>
           </div>
           <div className="flex flex-row space-x-1">

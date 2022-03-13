@@ -4,7 +4,8 @@ import {
   stringOrNumberToDottedFloat,
   toTitleCase,
 } from '@/presentation/utils/formatters';
-import CurrencyInput from 'react-currency-input-field';
+import { useState } from 'react';
+import { CurrencyInput } from '../input/currency-input/currrency-input';
 
 interface Props {
   items: RemoteOrderItemModel[];
@@ -14,7 +15,7 @@ interface Props {
   changeQuantity?: (alias: string, quantity: number) => void;
   changePrice?: (
     alias: string,
-    price: string | number | undefined,
+    price: number | null | undefined,
     originalPrice: string,
   ) => void;
   removeItem?: (alias: string) => void;
@@ -33,6 +34,7 @@ export function OrderItemList({
   setItemPriceToOriginal = () => ({}),
   selectInputRef,
 }: Props) {
+  const [isDefaultPrice, setIsDefaultPrice] = useState(true);
   return (
     <div>
       {!showActions && (
@@ -43,7 +45,7 @@ export function OrderItemList({
       <div className="border-2 rounded-lg border-dotted">
         <div>
           <table className="min-w-full divide-y-2 divide-dotted text-center">
-            <thead className="uppercase">
+            <thead className="">
               <tr>
                 <th
                   scope="col"
@@ -193,51 +195,64 @@ export function OrderItemList({
                     <div className="flex flex-row space-x-2 justify-center items-center">
                       {showActions ? (
                         <>
-                          <CurrencyInput
-                            id="input-example"
-                            name="input-name"
-                            value={item.device_price}
-                            onValueChange={(value) =>
-                              changePrice(
-                                item.device.alias,
-                                value,
-                                item.device.un_price.toString(),
-                              )
-                            }
-                            decimalScale={2}
-                            decimalsLimit={2}
-                            allowDecimals
-                            groupSeparator="."
-                            decimalSeparator=","
-                            autoComplete="off"
-                            maxLength={6}
-                            prefix="R$ "
-                            className="ml-4 w-16 bg-transparent text-center focus:outline-none"
-                            autoFocus
-                          />
-                          <button
-                            onClick={() =>
-                              setItemPriceToOriginal(item.device.alias)
-                            }
-                          >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              className="h-4 w-4 text-blue-400"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                              strokeWidth={2}
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                          {isDefaultPrice ? (
+                            <>
+                              <span className="w-16">
+                                {numberToBrazilianReal(item.price)}
+                              </span>
+                              <button onClick={() => setIsDefaultPrice(false)}>
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 text-blue-400"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
+                                  />
+                                </svg>
+                              </button>
+                            </>
+                          ) : (
+                            <>
+                              <CurrencyInput
+                                defaultValue={item.price}
+                                handleValue={(
+                                  value: number | null | undefined,
+                                ) => {
+                                  changePrice(item.device.alias, value, `1`);
+                                }}
                               />
-                            </svg>
-                          </button>
+                              <button
+                                onClick={() => {
+                                  setIsDefaultPrice(true);
+                                  setItemPriceToOriginal(item.device.alias);
+                                }}
+                              >
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  className="h-4 w-4 text-blue-400"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                  strokeWidth={2}
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                                  />
+                                </svg>
+                              </button>
+                            </>
+                          )}
                         </>
                       ) : (
-                        <>{numberToBrazilianReal(item.device_price)}</>
+                        <>{numberToBrazilianReal(item.price)}</>
                       )}
                     </div>
                   </td>
@@ -265,7 +280,7 @@ export function OrderItemList({
                       {showActions ? (
                         <input
                           className="w-14 bg-transparent text-center focus:outline-none"
-                          value={item.quantity}
+                          value={item.amount}
                           onKeyPress={(e) => {
                             if (!/[0-9]/.test(e.key)) {
                               e.preventDefault();
@@ -282,7 +297,7 @@ export function OrderItemList({
                           autoFocus
                         />
                       ) : (
-                        <>{item.quantity}</>
+                        <>{item.amount}</>
                       )}
                       <button
                         className={`${showActions ? `` : `hidden`}`}
@@ -307,8 +322,7 @@ export function OrderItemList({
                   </td>
                   <td className="py-2 px-3">
                     {numberToBrazilianReal(
-                      item.quantity *
-                        stringOrNumberToDottedFloat(item.device_price),
+                      item.amount * stringOrNumberToDottedFloat(item.price),
                     )}
                   </td>
                   {showActions && (

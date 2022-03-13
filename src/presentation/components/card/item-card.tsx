@@ -6,7 +6,7 @@ interface Props {
   device: DeviceModel;
 }
 
-export default function ItemsCard({ device }: Props) {
+export default function ItemCard({ device }: Props) {
   return (
     <div className="flex flex-col space-y-4 p-8 items-center justify-center bg-gray-100 rounded-lg">
       <div className="flex flex-row justify-between w-full text-center text-gray-600">

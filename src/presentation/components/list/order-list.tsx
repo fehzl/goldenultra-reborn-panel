@@ -94,13 +94,13 @@ export function OrderList({ orders = [] }: Props) {
                 {order.code}
               </td>
               <td className="px-6 py-3 truncate">
-                {enumStatusToString(order.status)}
+                {enumStatusToString(order.situation)}
               </td>
               <td className="px-6 py-3 truncate">{order.employee.name}</td>
               <td className="px-6 py-3">{order.client.name}</td>
               <td className="px-6 py-3">{order.items.length}</td>
               <td className="px-6 py-3">
-                {numberToBrazilianReal(order.total)}
+                {numberToBrazilianReal(order.order_price_overall)}
               </td>
               <td className="px-6 py-3">{utcToLocal(order.created_at)}</td>
               <td className="px-6 py-3">{utcToLocal(order.updated_at)}</td>

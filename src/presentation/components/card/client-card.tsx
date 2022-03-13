@@ -1,10 +1,11 @@
 import { RemoteClientModel } from '@/data/models';
+import { stringToBrazilianPhoneNumber } from '@/presentation/utils/formatters';
 
 interface Props {
   client: RemoteClientModel;
 }
 
-export function OrderClientCard({ client }: Props) {
+export function ClientCard({ client }: Props) {
   return (
     <div>
       <div className="pb-4 text-gray-600">
@@ -27,14 +28,16 @@ export function OrderClientCard({ client }: Props) {
           <div className="flex flex-row space-x-1">
             <span className="text-gray-600">Tipo:</span>
             <span className="text-gray-500">
-              Pessoa {client.person_type === `F` ? `Física` : `Jurídica`}
+              Pessoa {client.type === `individual` ? `Física` : `Jurídica`}
             </span>
           </div>
         </div>
         <div className="flex flex-col space-y-2 w-1/3">
           <div className="flex flex-row space-x-1">
             <span className="text-gray-600">Endereço:</span>
-            <span className="text-gray-500">{client.address.address}</span>
+            <span className="text-gray-500">
+              {client.address.street}, {client.address.number}
+            </span>
           </div>
           <div className="flex flex-row space-x-1">
             <span className="text-gray-600">Cidade:</span>
@@ -42,17 +45,19 @@ export function OrderClientCard({ client }: Props) {
           </div>
           <div className="flex flex-row space-x-1">
             <span className="text-gray-600">UF:</span>
-            <span className="text-gray-500">{client.address.state}</span>
+            <span className="text-gray-500">{client.address.uf}</span>
           </div>
           <div className="flex flex-row space-x-1">
             <span className="text-gray-600">CEP:</span>
-            <span className="text-gray-500">{client.address.zipcode}</span>
+            <span className="text-gray-500">{client.address.cep}</span>
           </div>
         </div>
         <div className="flex flex-col space-y-2 w-1/3">
           <div className="flex flex-row space-x-1">
             <span className="text-gray-600">Tel.:</span>
-            <span className="text-gray-500">{client.phone.phone}</span>
+            <span className="text-gray-500">
+              {stringToBrazilianPhoneNumber(client.phone.number)}
+            </span>
           </div>
         </div>
       </div>
