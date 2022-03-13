@@ -1,23 +1,43 @@
+type Address = {
+  id: string;
+  client_id: string;
+  street: string;
+  number: string;
+  complement: string;
+  reference: string;
+  neighborhood: string;
+  city: string;
+  uf: string;
+  cep: string;
+  type: string;
+  is_primary: boolean;
+  created_at: Date;
+  updated_at: Date;
+};
+
+type Phone = {
+  id: string;
+  client_id: string;
+  number: string;
+  type: string;
+  is_primary: boolean;
+  created_at: Date;
+  updated_at: Date;
+};
+
 export type ClientModel = {
   id: string;
+  user_id: string;
   name: string;
-  rg: string;
+  email: string;
+  type: string;
+  cnpj?: any;
   cpf: string;
-  person_type: string;
-  address: ClientAddressModel;
-  phone: ClientPhoneModel;
-};
-
-export type ClientAddressModel = {
-  id: string;
-  address: string;
-  state: string;
-  city: string;
-  zipcode: string;
-};
-
-export type ClientPhoneModel = {
-  id: string;
-  phone: string;
-  phone_type: string;
+  rg: string;
+  ie?: any;
+  is_enabled: boolean;
+  created_at: Date;
+  updated_at: Date;
+  address: Address;
+  phone: Phone;
 };
