@@ -5,15 +5,16 @@ import { useRouter } from 'next/router';
 import { PageHeader, PageWrapper } from '@/presentation/components/shared/';
 import { stringOrNumberToDottedFloat } from '@/presentation/utils/formatters';
 import {
-  OrderClientCard,
-  OrderClientDataEntry,
-  OrderItemList,
-  OrderItemDataEntry,
-} from '@/presentation/components/order';
+  SearchClientForm,
+  SearchItemForm,
+} from '@/presentation/components/form';
+import { ClientCard } from '@/presentation/components/card';
+import { OrderItemList } from '@/presentation/components/list';
+import { RemoteOrderItemModel } from '@/data/models';
 
 export default function NewOrder() {
   const router = useRouter();
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<RemoteOrderItemModel[]>([]);
   const [client, setClient] = useState<any>(null);
 
   const sections = [{ name: `Detalhes`, activeColor: `text-green-500` }];
@@ -30,9 +31,9 @@ export default function NewOrder() {
       items: [
         ...items.map((item) => ({
           deviceId: item.device.id,
-          devicePrice: stringOrNumberToDottedFloat(item.device_price),
-          quantity: item.quantity,
-          price: item.quantity * stringOrNumberToDottedFloat(item.device_price),
+          price: stringOrNumberToDottedFloat(item.price),
+          amount: item.amount,
+          overall: item.amount * stringOrNumberToDottedFloat(item.price),
         })),
       ],
     };
@@ -47,8 +48,8 @@ export default function NewOrder() {
   const increaseQuantity = (alias: string): void => {
     const item = items.find((item) => item.device.alias === alias);
     if (item) {
-      item.quantity += 1;
-      item.price = item.quantity * item.device_price;
+      item.amount += 1;
+      item.overall = item.amount * item.price;
       setItems([...items]);
     }
   };
@@ -56,9 +57,9 @@ export default function NewOrder() {
   const decreaseQuantity = (alias: string): void => {
     const item = items.find((item) => item.device.alias === alias);
     if (item) {
-      if (item.quantity > 1) {
-        item.quantity -= 1;
-        item.price = item.quantity * item.device_price;
+      if (item.amount > 1) {
+        item.amount -= 1;
+        item.overall = item.amount * item.price;
         setItems([...items]);
       }
     }
@@ -70,29 +71,21 @@ export default function NewOrder() {
       return;
     }
     if (item) {
-      item.quantity = quantity;
-      item.price = item.quantity * item.device_price;
+      item.amount = quantity;
+      item.overall = item.amount * item.price;
 
       setItems([...items]);
     }
   };
 
-  const changePrice = (
-    alias: string,
-    price: string | number | undefined,
-    originalPrice: string,
-  ): void => {
+  const changePrice = (alias: string, price: string): void => {
     const item = items.find((item) => item.device.alias === alias);
-    if (price === NaN) {
+    if (!price) {
       return;
     }
 
     if (item) {
-      if (!item.device.original_price) {
-        item.device.original_price = parseFloat(originalPrice).toFixed(2);
-      }
-      item.device_price = price;
-      item.device.manual_price = true;
+      item.price = Number(parseFloat(price).toFixed(2));
       setItems([...items]);
     }
   };
@@ -100,8 +93,7 @@ export default function NewOrder() {
   const setItemPriceToOriginal = (alias: string): void => {
     const item = items.find((item) => item.device.alias === alias);
     if (item) {
-      item.device_price = parseFloat(item.device.un_price).toFixed(2);
-      item.device.manual_price = false;
+      item.price = item.device.un_price;
       setItems([...items]);
     }
   };
@@ -143,13 +135,13 @@ export default function NewOrder() {
         <div className="flex flex-col px-8 space-y-8">
           <div className="flex flex-col space-y-3">
             {!client ? (
-              <OrderClientDataEntry client={client} setClient={setClient} />
+              <SearchClientForm client={client} setClient={setClient} />
             ) : (
-              <OrderClientCard client={client} />
+              <ClientCard client={client} />
             )}
           </div>
           <div className="flex flex-col space-y-6">
-            <OrderItemDataEntry
+            <SearchItemForm
               items={items}
               setItems={setItems}
               selectInputRef={selectItemsRef}
