@@ -5,6 +5,7 @@ import { SelectInput } from '@/presentation/components/input/select-input';
 import { TextInput } from '@/presentation/components/input/text-input';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import { CurrencyInput } from '../input/currency-input/currrency-input';
 
 interface Props {
   orderId: string;
@@ -64,7 +65,11 @@ export function CreatePaymentForm({ orderId, orderCode }: Props) {
             />
           </div>
           <div className="w-1/12">
-            <TextInput label="Valor" {...register(`amount`)} />
+            <CurrencyInput
+              handleValue={(value) => setValue(`amount`, value)}
+              label="Valor"
+              type="form"
+            />
           </div>
           <div className="w-2/12">
             <TextInput label="Identificador" {...register(`identifier`)} />

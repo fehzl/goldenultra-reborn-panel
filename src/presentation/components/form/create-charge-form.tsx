@@ -3,6 +3,7 @@ import { makeRemoteSaveOrderCharge } from '@/main/factories/usecases';
 import { queryClient } from '@/pages/_app';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
+import { CurrencyInput } from '../input/currency-input/currrency-input';
 import { SelectInput } from '../input/select-input';
 import { TextInput } from '../input/text-input';
 
@@ -56,7 +57,11 @@ export function CreateChargeForm({ order_id, order_code }: Props) {
             />
           </div>
           <div className="w-1/12">
-            <TextInput label="Valor" {...register(`value`)} />
+            <CurrencyInput
+              handleValue={(value) => setValue(`value`, value)}
+              label="Valor"
+              type="form"
+            />
           </div>
           <div className="w-2/12">
             <TextInput label="Observações" {...register(`observation`)} />
