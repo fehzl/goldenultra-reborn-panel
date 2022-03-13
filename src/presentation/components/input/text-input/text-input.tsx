@@ -18,7 +18,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, InputProps>(
           </label>
         )}
         <input
-          className={`border-2 rounded-lg text-gray-800 px-2 py-1 focus:outline-none ${
+          className={`border-2 rounded-lg text-gray-800 h-10 px-2 py-1 focus:outline-none ${
             !error ? `border-gray-200` : `border-red-200`
           }`}
           autoComplete="off"
