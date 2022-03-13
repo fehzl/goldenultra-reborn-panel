@@ -57,7 +57,25 @@ export function OrderPaymentTab({ data }: Props) {
         data={data.payments}
         actions={{ onDelete }}
       />
-      <PriceOverallCard prices={[1, 2, data.order_price_overall]} type="sum" />
+      <PriceOverallCard
+        prices={[
+          {
+            label: `Recebido`,
+            price: data.payments.reduce((acc, cur) => acc + cur.amount, 0),
+          },
+          {
+            label: `Desconto`,
+            price: 0,
+          },
+          {
+            label: `A receber`,
+            price:
+              data.order_price_overall -
+              data.payments.reduce((acc, cur) => acc + cur.amount, 0),
+          },
+        ]}
+        type="sum"
+      />
     </div>
   );
 }

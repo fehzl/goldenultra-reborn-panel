@@ -59,9 +59,18 @@ export function OrderChargersTab({ data }: Props) {
       />
       <PriceOverallCard
         prices={[
-          data.items_price_sum,
-          data.charges_sum,
-          data.order_price_overall,
+          {
+            label: `Itens`,
+            price: data.items_price_sum,
+          },
+          {
+            label: `Encargos`,
+            price: data.charges_sum,
+          },
+          {
+            label: `Total`,
+            price: data.order_price_overall,
+          },
         ]}
         type="minus"
       />
