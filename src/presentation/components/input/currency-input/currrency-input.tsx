@@ -3,9 +3,10 @@ import Currency, { CurrencyInputProps } from 'react-currency-input-field';
 type Props = CurrencyInputProps & {
   handleValue: (value: number | null | undefined) => void;
   type: 'form' | 'table';
+  label?: string;
 };
 
-export function CurrencyInput({ handleValue, type, ...rest }: Props) {
+export function CurrencyInput({ handleValue, type, label, ...rest }: Props) {
   const handleOnValueChange: CurrencyInputProps['onValueChange'] = (
     _value,
     _,
@@ -26,7 +27,12 @@ export function CurrencyInput({ handleValue, type, ...rest }: Props) {
   };
 
   return (
-    <div>
+    <div className="flex flex-col">
+      {label && (
+        <label htmlFor="code" className="text-sm text-gray-500">
+          {label}
+        </label>
+      )}
       <Currency
         onValueChange={handleOnValueChange}
         groupSeparator="."
@@ -36,6 +42,7 @@ export function CurrencyInput({ handleValue, type, ...rest }: Props) {
         decimalsLimit={2}
         className={handleClassName()}
         {...rest}
+        autoComplete="off"
       />
     </div>
   );
