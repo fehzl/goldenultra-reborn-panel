@@ -1,40 +1,24 @@
-import { RemoteClientModel, RemoteEmployeeModel } from '.';
+import {
+  RemoteEmployeeModel,
+  RemotePaymentModel,
+  RemoteChargeModel,
+  RemoteOrderItemModel,
+  RemoteClientModel,
+} from '.';
 
 export type RemoteOrderModel = {
   id: string;
   code: string;
-  status: string;
-  client: RemoteClientModel;
+  situation: string;
+  created_at: Date;
+  updated_at: Date;
   employee: RemoteEmployeeModel;
-  device: RemoteOrderItemDeviceModel;
-  payments: RemoteOrderItemPaymentModel[];
+  payments: RemotePaymentModel[];
+  charges: RemoteChargeModel[];
   items: RemoteOrderItemModel[];
-  total: number;
-  created_at: string;
-  updated_at: string;
-};
-
-export type RemoteOrderItemModel = {
-  id: string;
-  device: RemoteOrderItemDeviceModel;
-  quantity: number;
-  device_price: number;
-  price: number;
-};
-
-export type RemoteOrderItemDeviceModel = {
-  id: string;
-  code: string;
-  exhibition_description: string;
-  un_price: number;
-  alias: string;
-};
-
-export type RemoteOrderEmployeeModel = {
-  id: string;
-  email: string;
-};
-
-export type RemoteOrderItemPaymentModel = {
-  id: string;
+  client: RemoteClientModel;
+  items_price_sum: number;
+  items_discount_sum: number;
+  charges_sum: number;
+  order_price_overall: number;
 };

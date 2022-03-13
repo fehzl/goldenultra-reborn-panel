@@ -1,40 +1,34 @@
-import { ClientModel, EmployeeModel } from '.';
+import {
+  ChargeModel,
+  ClientModel,
+  EmployeeModel,
+  DeviceModel,
+  PaymentModel,
+} from '.';
+
+export type Item = {
+  id: number;
+  price: number;
+  amount: number;
+  discount: number;
+  overall: number;
+  amount_separated: number;
+  device: DeviceModel;
+};
 
 export type OrderModel = {
   id: string;
   code: string;
-  status: string;
-  client: ClientModel;
+  situation: string;
+  created_at: Date;
+  updated_at: Date;
   employee: EmployeeModel;
-  device: OrderItemDeviceModel;
-  payments: OrderItemPaymentModel[];
-  items: OrderItemModel[];
-  total: number;
-  created_at: string;
-  updated_at: string;
-};
-
-export type OrderItemModel = {
-  id: string;
-  device: OrderItemDeviceModel;
-  quantity: number;
-  device_price: number;
-  price: number;
-};
-
-export type OrderItemDeviceModel = {
-  id: string;
-  code: string;
-  exhibition_description: string;
-  un_price: number;
-  alias: string;
-};
-
-export type OrderEmployeeModel = {
-  id: string;
-  email: string;
-};
-
-export type OrderItemPaymentModel = {
-  id: string;
+  payments: PaymentModel[];
+  charges: ChargeModel[];
+  items: Item[];
+  client: ClientModel;
+  items_price_sum: number;
+  items_discount_sum: number;
+  charges_sum: number;
+  order_price_overall: number;
 };
