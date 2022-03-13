@@ -9,11 +9,10 @@ export class RemoteLoadOrder implements LoadOrder {
     private readonly httpClient: HttpClient<RemoteLoadOrder.Model>,
   ) {}
 
-  async load(code: string): Promise<RemoteLoadOrder.Model> {
+  async load(code: string): Promise<LoadOrder.Model> {
     const httpResponse = await this.httpClient.request({
-      url: this.url,
+      url: `${this.url}/${code}`,
       method: `GET`,
-      params: { code },
     });
 
     const remoteLoadOrder = httpResponse?.body || ({} as RemoteLoadOrder.Model);
