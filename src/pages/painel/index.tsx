@@ -1,10 +1,13 @@
+import { CurrencyInput } from '@/presentation/components/input/currency-input/currrency-input';
 import { GetServerSideProps } from 'next';
 import { getSession } from 'next-auth/react';
 
 export default function Painel() {
   return (
     <div className="px-14">
-      <h1>Painel</h1>
+      <h1>
+        <CurrencyInput />
+      </h1>
     </div>
   );
 }

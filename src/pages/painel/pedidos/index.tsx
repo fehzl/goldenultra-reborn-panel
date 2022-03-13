@@ -4,7 +4,7 @@ import { useQuery } from 'react-query';
 import { makeRemoteLoadOrderList } from '@/main/factories/usecases';
 import { PageHeader } from '@/presentation/components/shared/page/header';
 import { PageWrapper } from '@/presentation/components/shared/page/wrapper';
-import { OrderList } from '@/presentation/components/order';
+import { OrderList } from '@/presentation/components/list';
 
 export default function Orders() {
   const remoteLoadOrderList = makeRemoteLoadOrderList();
