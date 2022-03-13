@@ -1,13 +1,18 @@
 import { numberToBrazilianReal } from '@/presentation/utils/formatters';
 
+type Prices = {
+  label: string;
+  price: number;
+};
+
 interface Props {
-  prices: number[];
+  prices: Prices[];
   type: 'overall' | 'sum' | 'minus';
 }
 
 export function PriceOverallCard({ prices, type }: Props) {
   const renderTypeClass = () => {
-    const common = `font-bold text-sm flex flex-row items-center w-32 justify-center`;
+    const common = `flex flex-col font-bold text-sm flex flex-row items-center w-32 justify-center`;
 
     switch (type) {
       case `overall`:
@@ -15,7 +20,7 @@ export function PriceOverallCard({ prices, type }: Props) {
       case `sum`:
         return `text-green-500 ${common}`;
       case `minus`:
-        return `text-red-500 ${common}`;
+        return `text-red-400 ${common}`;
       default:
         return `text-gray-500 ${common}`;
     }
@@ -25,7 +30,8 @@ export function PriceOverallCard({ prices, type }: Props) {
     <div className="bg-white h-24 border-2 border-dotted divide-x-2 rounded-lg flex flex-row px-4 py-4 items-center justify-center">
       {prices.map((price, index) => (
         <div key={index} className={renderTypeClass()}>
-          <span>{numberToBrazilianReal(price)}</span>
+          <span className="font-normal">{price.label}</span>
+          <span>{numberToBrazilianReal(price.price)}</span>
         </div>
       ))}
     </div>
