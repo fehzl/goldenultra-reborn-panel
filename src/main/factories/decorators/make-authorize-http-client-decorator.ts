@@ -5,5 +5,5 @@ import { makeAxiosHttpClientAdapter } from '../http';
 export const makeAuthorizeHttpClientDecorator = (): HttpClient =>
   new AuthorizeHttpClientDecorator(
     makeAxiosHttpClientAdapter(),
-    `MQ.dv8BiTkP1tQKxXKlPxhEqQcYAvoTBp1khj0haPmiJoY00R6iGww6KyewJNg1`,
+    `MQ.FHJzNDR3qfrlL8lRWs_WjWg4UAdAUpcKidHTY3S6xPFs7byU0JKjh1c5xEQB`,
   );
