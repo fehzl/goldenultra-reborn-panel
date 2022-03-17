@@ -1,93 +1,77 @@
-import { HiOutlineTrash } from 'react-icons/hi';
-
-type Column = {
-  label: string;
-  width: string;
-  key: string;
-};
-
-interface Props<T> {
-  columns: Column[];
-  data: T[];
-  actions?: {
-    onDelete: (id: string) => void;
-  };
-  hasCheckboxes?: boolean;
+function objectValues<T>(obj: T) {
+  return Object.keys(obj).map((objKey) => obj[objKey as keyof T]);
 }
 
-export function Table({ columns, actions, data }: Props<any>) {
+function objectKeys<T>(obj: T) {
+  return Object.keys(obj).map((objKey) => objKey as keyof T);
+}
+
+type PrimitiveType = string | symbol | number | boolean;
+
+// Type guard for the primitive types which will support printing
+// out of the box
+function isPrimitive(value: any): value is PrimitiveType {
   return (
-    <div className="border-2 rounded-lg border-dotted">
-      <table className="min-w-full divide-y-2 divide-dotted text-center">
-        <thead>
-          <tr className="h-12">
-            {columns.map((column) => (
-              <th key={column.label} className={`w-${column.width} `}>
-                <div className="flex items-center justify-center">
-                  <span className="font-normal text-sm text-gray-500">
-                    {column.label}
-                  </span>
-                </div>
-              </th>
-            ))}
-            {actions && (
-              <th className="w-1/6">
-                <div className="flex items-center justify-center">
-                  <span className="font-normal text-sm text-gray-500">
-                    Gerenciar
-                  </span>
-                </div>
-              </th>
-            )}
-          </tr>
-        </thead>
-        <tbody className="text-sm">
-          {data.length > 0 ? (
-            <>
-              {data.map((item, index) => (
-                <tr
-                  key={item.key}
-                  className={`${
-                    index % 2 === 0 ? `bg-gray-100` : `bg-white`
-                  } h-12`}
-                >
-                  {columns.map((column) => (
-                    <td key={column.key} className={`text-gray-700`}>
-                      {item[column.key]}
-                    </td>
-                  ))}
-                  {actions && (
-                    <td className="px-3 py-2">
-                      <button
-                        onClick={() => {
-                          if (actions && actions.onDelete) {
-                            actions.onDelete(item.id);
-                          }
-                        }}
-                      >
-                        <span className="text-red-500 text-lg">
-                          <HiOutlineTrash />
-                        </span>
-                      </button>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </>
-          ) : (
-            <tr>
-              <td
-                colSpan={actions ? columns.length + 1 : columns.length}
-                className="p-4 truncate"
-              >
-                <span className="text-gray-500">
-                  Nenhuma inserção localizada
-                </span>
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
+    typeof value === `string` ||
+    typeof value === `number` ||
+    typeof value === `boolean` ||
+    typeof value === `symbol`
+  );
+}
+
+interface MinTableItem {
+  id: PrimitiveType;
+}
+
+type TableHeaders<T extends MinTableItem> = Record<keyof T, string>;
+
+type CustomRenderers<T extends MinTableItem> = Partial<
+  Record<keyof T, (it: T) => React.ReactNode>
+>;
+
+interface TableProps<T extends MinTableItem> {
+  items: T[];
+  headers: TableHeaders<T>;
+  customRenderers?: CustomRenderers<T>;
+  hideId?: boolean;
+}
+
+export default function Table<T extends MinTableItem>(props: TableProps<T>) {
+  function renderRow(item: T) {
+    return (
+      <tr>
+        {objectKeys(item).map((itemProperty, index) => {
+          const customRenderer = props.customRenderers?.[itemProperty];
+
+          if (customRenderer) {
+            return <td>{customRenderer(item)}</td>;
+          }
+
+          if (props.hideId && index === 0) {
+            return null;
+          }
+
+          return (
+            <td key={index}>
+              {isPrimitive(item[itemProperty]) ? item[itemProperty] : ``}
+            </td>
+          );
+        })}
+      </tr>
+    );
+  }
+
+  return (
+    <table>
+      <thead>
+        {objectValues(props.headers).map((headerValue, index) => {
+          if (props.hideId && index === 0) {
+            return null;
+          }
+          return <th key={index}>{headerValue}</th>;
+        })}
+      </thead>
+      <tbody>{props.items.map(renderRow)}</tbody>
+    </table>
   );
 }

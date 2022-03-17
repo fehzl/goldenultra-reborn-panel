@@ -26,36 +26,35 @@ export function OrderPaymentTab({ data }: Props) {
     mutation.mutateAsync(id);
   };
 
-  const renderTableColuns = () => [
-    {
-      label: `Inserido em`,
-      width: `1/6`,
-      key: `created_at`,
-    },
-    {
-      label: `Método`,
-      width: `1/6`,
-      key: `method`,
-    },
-    {
-      label: `Preço`,
-      width: `1/6`,
-      key: `amount`,
-    },
-    {
-      label: `Identificação`,
-      width: `1/6`,
-      key: `identifier`,
-    },
-  ];
+  const rows = data.payments.map((payment) => ({
+    id: payment.id,
+    createdAt: payment.created_at,
+    method: payment.method,
+    amount: payment.amount,
+    identifier: payment.identifier,
+    delete: () => onDelete(payment.id),
+  }));
 
   return (
     <div className="space-y-8">
       <CreatePaymentForm orderId={data.id} orderCode={data.code} />
       <Table
-        columns={renderTableColuns()}
-        data={data.payments}
-        actions={{ onDelete }}
+        items={rows}
+        headers={{
+          id: `ID`,
+          createdAt: `Data`,
+          amount: `Valor`,
+          method: `Método`,
+          identifier: `Identificador`,
+          delete: `Excluir`,
+        }}
+        customRenderers={{
+          delete: (item) => (
+            <button type="button" onClick={item.delete}>
+              Excluir
+            </button>
+          ),
+        }}
       />
       <PriceOverallCard
         prices={[

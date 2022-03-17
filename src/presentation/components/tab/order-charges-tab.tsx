@@ -22,40 +22,37 @@ export function OrderChargersTab({ data }: Props) {
     },
   );
 
-  const renderTableColuns = () => [
-    {
-      label: `Inserido em`,
-      width: `1/6`,
-      key: `created_at`,
-    },
-    {
-      label: `Tipo`,
-      width: `1/6`,
-      key: `type`,
-    },
-    {
-      label: `Preço`,
-      width: `1/6`,
-      key: `value`,
-    },
-    {
-      label: `Observações`,
-      width: `2/6`,
-      key: `observation`,
-    },
-  ];
-
   const onDelete = async (id: string) => {
     mutation.mutateAsync(id);
   };
+
+  const rows = data.charges.map((charge) => ({
+    id: charge.id,
+    createdAt: charge.created_at,
+    type: charge.type,
+    value: charge.value,
+    delete: () => onDelete(charge.id),
+  }));
 
   return (
     <div className="flex flex-col space-y-8">
       <CreateChargeForm order_id={data.id} order_code={data.code} />
       <Table
-        columns={renderTableColuns()}
-        data={data.charges}
-        actions={{ onDelete }}
+        items={rows}
+        headers={{
+          id: `ID`,
+          createdAt: `Data`,
+          type: `Tipo`,
+          value: `Valor`,
+          delete: `Excluir`,
+        }}
+        customRenderers={{
+          delete: (item) => (
+            <button type="button" onClick={item.delete}>
+              Excluir
+            </button>
+          ),
+        }}
       />
       <PriceOverallCard
         prices={[
