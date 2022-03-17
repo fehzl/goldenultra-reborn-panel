@@ -3,9 +3,8 @@ export type PaymentModel = {
   order_id: string;
   method: string;
   situation: string;
-  amount: number;
+  value: number;
   identifier: string;
-  observation: string;
   created_at: Date;
   updated_at: Date;
 };

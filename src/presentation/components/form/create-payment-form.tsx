@@ -31,10 +31,9 @@ export function CreatePaymentForm({ orderId, orderCode }: Props) {
     const payment: SaveOrderPayment.Params = {
       orderId,
       method: data.method,
-      amount: data.amount,
+      value: data.value,
       identifier: data.identifier,
       situation: `PAID`,
-      observation: data.observation,
     };
 
     mutation.mutate(payment);
@@ -66,7 +65,7 @@ export function CreatePaymentForm({ orderId, orderCode }: Props) {
           </div>
           <div className="w-1/12">
             <CurrencyInput
-              handleValue={(value) => setValue(`amount`, value)}
+              handleValue={(value) => setValue(`value`, value)}
               label="Valor"
               type="form"
             />

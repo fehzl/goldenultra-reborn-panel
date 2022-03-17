@@ -30,7 +30,7 @@ export function OrderPaymentTab({ data }: Props) {
     id: payment.id,
     createdAt: payment.created_at,
     method: payment.method,
-    amount: payment.amount,
+    value: payment.value,
     identifier: payment.identifier,
     delete: () => onDelete(payment.id),
   }));
@@ -43,7 +43,7 @@ export function OrderPaymentTab({ data }: Props) {
         headers={{
           id: `ID`,
           createdAt: `Data`,
-          amount: `Valor`,
+          value: `Valor`,
           method: `Método`,
           identifier: `Identificador`,
           delete: `Excluir`,
@@ -60,7 +60,7 @@ export function OrderPaymentTab({ data }: Props) {
         prices={[
           {
             label: `Recebido`,
-            price: data.payments.reduce((acc, cur) => acc + cur.amount, 0),
+            price: data.payments.reduce((acc, cur) => acc + cur.value, 0),
           },
           {
             label: `Desconto`,
@@ -70,7 +70,7 @@ export function OrderPaymentTab({ data }: Props) {
             label: `A receber`,
             price:
               data.order_price_overall -
-              data.payments.reduce((acc, cur) => acc + cur.amount, 0),
+              data.payments.reduce((acc, cur) => acc + cur.value, 0),
           },
         ]}
         type="sum"
