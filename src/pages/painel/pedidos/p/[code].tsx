@@ -8,6 +8,7 @@ import {
   OrderChargersTab,
   OrderDetailsTab,
   OrderPaymentTab,
+  OrderSeparationTab,
 } from '@/presentation/components/tab';
 import { makeRemoteLoadOrder } from '@/main/factories/usecases';
 
@@ -42,7 +43,7 @@ export default function ShowOrder() {
         case `Pagamentos`:
           return <OrderPaymentTab data={data} />;
         case `Separação`:
-          return <div>Separação</div>;
+          return <OrderSeparationTab data={data} />;
         case `Expedição`:
           return <div>Expedição</div>;
         default:
