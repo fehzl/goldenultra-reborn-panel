@@ -1,6 +1,11 @@
 import { RemoteOrderModel } from '@/data/models';
 import { makeRemoteDeleteOrderCharge } from '@/main/factories/usecases';
 import { queryClient } from '@/pages/_app';
+import { orderChargeTypeToString } from '@/presentation/utils/enumsToString';
+import {
+  numberToBrazilianReal,
+  utcToLocal,
+} from '@/presentation/utils/formatters';
 import { useMutation } from 'react-query';
 import { PriceOverallCard } from '../card';
 import { CreateChargeForm } from '../form/create-charge-form';
@@ -28,9 +33,10 @@ export function OrderChargersTab({ data }: Props) {
 
   const rows = data.charges.map((charge) => ({
     id: charge.id,
-    createdAt: charge.created_at,
-    type: charge.type,
-    value: charge.value,
+    createdAt: utcToLocal(charge.created_at),
+    type: orderChargeTypeToString(charge.type),
+    value: numberToBrazilianReal(charge.value),
+    //
     delete: () => onDelete(charge.id),
   }));
 
@@ -41,10 +47,10 @@ export function OrderChargersTab({ data }: Props) {
         items={rows}
         headers={{
           id: `ID`,
-          createdAt: `Data`,
+          createdAt: `Inserido em`,
           type: `Tipo`,
           value: `Valor`,
-          delete: `Excluir`,
+          delete: `Ações`,
         }}
         customRenderers={{
           delete: (item) => (
@@ -53,6 +59,7 @@ export function OrderChargersTab({ data }: Props) {
             </button>
           ),
         }}
+        hideId
       />
       <PriceOverallCard
         prices={[

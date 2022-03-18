@@ -1,6 +1,11 @@
 import { RemoteOrderModel } from '@/data/models';
 import { makeRemoteDeleteOrderPayment } from '@/main/factories/usecases';
 import { queryClient } from '@/pages/_app';
+import { orderPaymentMethodeEnumToString } from '@/presentation/utils/enumsToString';
+import {
+  numberToBrazilianReal,
+  utcToLocal,
+} from '@/presentation/utils/formatters';
 import { useMutation } from 'react-query';
 import { PriceOverallCard } from '../card';
 import { CreatePaymentForm } from '../form';
@@ -28,9 +33,9 @@ export function OrderPaymentTab({ data }: Props) {
 
   const rows = data.payments.map((payment) => ({
     id: payment.id,
-    createdAt: payment.created_at,
-    method: payment.method,
-    value: payment.value,
+    createdAt: utcToLocal(payment.created_at),
+    method: orderPaymentMethodeEnumToString(payment.method),
+    value: numberToBrazilianReal(payment.value),
     identifier: payment.identifier,
     delete: () => onDelete(payment.id),
   }));
@@ -42,11 +47,11 @@ export function OrderPaymentTab({ data }: Props) {
         items={rows}
         headers={{
           id: `ID`,
-          createdAt: `Data`,
-          value: `Valor`,
+          createdAt: `Inserido em`,
           method: `Método`,
+          value: `Valor`,
           identifier: `Identificador`,
-          delete: `Excluir`,
+          delete: `Ações`,
         }}
         customRenderers={{
           delete: (item) => (
@@ -55,6 +60,7 @@ export function OrderPaymentTab({ data }: Props) {
             </button>
           ),
         }}
+        hideId
       />
       <PriceOverallCard
         prices={[
