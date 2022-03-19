@@ -1,6 +1,9 @@
 import { RemoteOrderModel } from '@/data/models';
-import { utcToLocal } from '@/presentation/utils/formatters';
+import { makeRemoteSaveOrderItemSeparation } from '@/main/factories/usecases';
+import { queryClient } from '@/pages/_app';
+import { booleanToString, utcToLocal } from '@/presentation/utils/formatters';
 import { useState } from 'react';
+import { useMutation } from 'react-query';
 import { Table } from '../table';
 
 interface Props {
@@ -8,6 +11,21 @@ interface Props {
 }
 
 export function OrderSeparationTab({ data }: Props) {
+  const remoteOrderItemSeparation = makeRemoteSaveOrderItemSeparation();
+
+  const mutation = useMutation(
+    async (id: string) => await remoteOrderItemSeparation.save({ id }),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries([`order`, data.code]);
+      },
+    },
+  );
+
+  const onSeparate = async (id: string) => {
+    mutation.mutateAsync(id);
+  };
+
   const [employee, setEmployee] = useState<string>(``);
   const [startedAt, setStartedAt] = useState<string>(``);
   const [finishedAt, setFinishedAt] = useState<string>(``);
@@ -16,6 +34,9 @@ export function OrderSeparationTab({ data }: Props) {
     id: item.id,
     description: item.device.exhibition_description,
     amount: item.amount,
+    separated: booleanToString(item.separated),
+    amount_separated: item.amount_separated,
+    separate: () => onSeparate(item.id),
   }));
 
   return (
@@ -53,6 +74,16 @@ export function OrderSeparationTab({ data }: Props) {
           id: `ID`,
           description: `Descrição`,
           amount: `Quantidade`,
+          separated: `Separado`,
+          amount_separated: `Quantidade separada`,
+          separate: `Separar`,
+        }}
+        customRenderers={{
+          separate: (item) => (
+            <button type="button" onClick={item.separate}>
+              Separar
+            </button>
+          ),
         }}
         hideId
       />
