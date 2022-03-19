@@ -7,5 +7,6 @@ export * from './remote-load-order-list';
 export * from './remote-load-order';
 export * from './remote-save-client';
 export * from './remote-save-order-charge';
+export * from './remote-save-order-item-separation';
 export * from './remote-save-order-payment';
 export * from './remote-save-order';

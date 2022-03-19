@@ -7,5 +7,6 @@ export * from './load-order-list';
 export * from './load-order';
 export * from './save-client';
 export * from './save-order-charge';
+export * from './save-order-item-separation';
 export * from './save-order-payment';
 export * from './save-order';
