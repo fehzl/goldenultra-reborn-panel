@@ -99,3 +99,7 @@ export function enumPhoneTypeToString(type: string): string {
       return `Não definido`;
   }
 }
+
+export function booleanToString(value: boolean): string {
+  return value ? `Sim` : `Não`;
+}
