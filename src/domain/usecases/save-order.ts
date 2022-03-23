@@ -6,7 +6,11 @@ export interface SaveOrder {
 
 export namespace SaveOrder {
   export type Params = {
-    clientId: string;
+    orderId: string;
+    deviceId: string;
+    price: number;
+    amount: number;
+    overall: number;
   };
 
   export type Model = OrderModel;
