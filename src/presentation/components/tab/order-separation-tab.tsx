@@ -2,7 +2,6 @@ import { RemoteOrderModel } from '@/data/models';
 import { makeRemoteSaveOrderItemSeparation } from '@/main/factories/usecases';
 import { queryClient } from '@/pages/_app';
 import { booleanToString, utcToLocal } from '@/presentation/utils/formatters';
-import { useState } from 'react';
 import { useMutation } from 'react-query';
 import { Table } from '../table';
 
@@ -26,56 +25,27 @@ export function OrderSeparationTab({ data }: Props) {
     mutation.mutateAsync(id);
   };
 
-  const [employee, setEmployee] = useState<string>(``);
-  const [startedAt, setStartedAt] = useState<string>(``);
-  const [finishedAt, setFinishedAt] = useState<string>(``);
-
   const rows = data.items.map((item) => ({
     id: item.id,
     description: item.device.exhibition_description,
-    amount: item.amount,
     separated: booleanToString(item.separated),
-    amount_separated: item.amount_separated,
+    amount: `${item.amount}/${item.amount_separated}`,
+    separated_by: item.separated ? item.separated_by.name : `---`,
+    separated_at: item.separated ? utcToLocal(item.separated_at) : `---`,
     separate: () => onSeparate(item.id),
   }));
 
   return (
     <div>
-      <span>Checklist</span>
-      <div className="flex flex-row">
-        <div className="block">
-          <div>{utcToLocal(startedAt)}</div>
-          <button
-            type="button"
-            onClick={() => {
-              setStartedAt(new Date().toISOString());
-              setEmployee(`Felipe`);
-            }}
-          >
-            Iniciar
-          </button>
-        </div>
-        <div className="block">
-          <div>{utcToLocal(finishedAt)}</div>
-          <button
-            type="button"
-            onClick={() => {
-              setFinishedAt(new Date().toISOString());
-            }}
-          >
-            Finalizar
-          </button>
-        </div>
-      </div>
-      <div>responsável: {employee}</div>
       <Table
         items={rows}
         headers={{
           id: `ID`,
           description: `Descrição`,
-          amount: `Quantidade`,
           separated: `Separado`,
-          amount_separated: `Quantidade separada`,
+          amount: `Quantidade`,
+          separated_by: `Separado por`,
+          separated_at: `Separado em`,
           separate: `Separar`,
         }}
         customRenderers={{
