@@ -7,6 +7,8 @@ import { ReactNode, useState } from 'react';
 import {
   OrderChargersTab,
   OrderDetailsTab,
+  OrderDispatchTab,
+  OrderOverallTab,
   OrderPaymentTab,
   OrderSeparationTab,
 } from '@/presentation/components/tab';
@@ -24,6 +26,7 @@ export default function ShowOrder() {
     { name: `Pagamentos`, activeColor: `text-blue-400` },
     { name: `Separação`, activeColor: `text-blue-400` },
     { name: `Expedição`, activeColor: `text-blue-400` },
+    { name: `Situação`, activeColor: `text-blue-400` },
   ];
 
   const [activeSection, setActiveSection] = useState<string>(sections[0].name);
@@ -45,7 +48,9 @@ export default function ShowOrder() {
         case `Separação`:
           return <OrderSeparationTab data={data} />;
         case `Expedição`:
-          return <div>Expedição</div>;
+          return <OrderDispatchTab data={data} />;
+        case `Situação`:
+          return <OrderOverallTab />;
         default:
           return <div>404</div>;
       }
