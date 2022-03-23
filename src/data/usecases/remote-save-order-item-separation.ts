@@ -27,7 +27,7 @@ export class RemoteSaveOrderItemSepartion implements SaveOrderItemSeparation {
     switch (httpResponse.httpCode) {
       case HttpCode.OK:
         return remoteOrderItem;
-      case HttpCode.FORBIDDEN:
+      case HttpCode.UNAUTHORIZED:
         throw new AccessDeniedError();
       case HttpCode.UNPROCESSABLE_ENTITY:
         throw new UnprocessableEntityError();
