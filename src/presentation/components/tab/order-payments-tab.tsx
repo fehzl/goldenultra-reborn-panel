@@ -65,18 +65,14 @@ export function OrderPaymentTab({ data }: Props) {
       <PriceOverallCard
         prices={[
           {
-            label: `Recebido`,
-            price: data.payments.reduce((acc, cur) => acc + cur.value, 0),
-          },
-          {
-            label: `Desconto`,
-            price: 0,
-          },
-          {
             label: `A receber`,
             price:
               data.order_price_overall -
               data.payments.reduce((acc, cur) => acc + cur.value, 0),
+          },
+          {
+            label: `Recebido`,
+            price: data.payments.reduce((acc, cur) => acc + cur.value, 0),
           },
         ]}
         type="sum"
