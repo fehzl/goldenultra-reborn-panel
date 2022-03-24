@@ -7,7 +7,7 @@ import {
 } from '.';
 
 export type Item = {
-  id: number;
+  id: string;
   price: number;
   amount: number;
   discount: number;
