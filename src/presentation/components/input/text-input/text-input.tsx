@@ -1,15 +1,16 @@
 import React from 'react';
+import { FieldError } from 'react-hook-form';
 
 type InputProps = React.DetailedHTMLProps<
   React.InputHTMLAttributes<HTMLInputElement>,
   HTMLInputElement
 > & {
   label?: React.ReactNode;
-  error?: string;
+  error?: FieldError;
 };
 
 export const TextInput = React.forwardRef<HTMLInputElement, InputProps>(
-  function Input({ label, error, ...rest }: InputProps, ref) {
+  function Input({ label, error = undefined, ...rest }: InputProps, ref) {
     return (
       <div className="flex flex-col">
         {label && (
@@ -25,7 +26,7 @@ export const TextInput = React.forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...rest}
         />
-        <small className="text-red-400">{error}</small>
+        {error && <small className="text-red-400">{error.message}</small>}
       </div>
     );
   },
