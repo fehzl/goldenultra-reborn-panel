@@ -1,5 +1,6 @@
 import { AccessDeniedError, UnexpectedError } from '@/domain/errors';
 import { LoadOrder } from '@/domain/usecases';
+import { toTitleCase } from '@/presentation/utils/formatters';
 import { RemoteOrderModel } from '../models/remote-order-model';
 import { HttpClient, HttpCode } from '../protocols/http';
 
@@ -19,7 +20,21 @@ export class RemoteLoadOrder implements LoadOrder {
 
     switch (httpResponse.httpCode) {
       case HttpCode.OK:
-        return remoteLoadOrder;
+        return {
+          ...remoteLoadOrder,
+          items: remoteLoadOrder.items.map((item) => {
+            return {
+              ...item,
+              device: {
+                ...item.device,
+                code: item.device.code.toUpperCase(),
+                exhibition_description: toTitleCase(
+                  item.device.exhibition_description,
+                ),
+              },
+            };
+          }),
+        };
       case HttpCode.FORBIDDEN:
         throw new AccessDeniedError();
       default:
