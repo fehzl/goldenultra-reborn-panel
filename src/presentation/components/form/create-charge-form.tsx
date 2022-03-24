@@ -3,19 +3,42 @@ import { makeRemoteSaveOrderCharge } from '@/main/factories/usecases';
 import { queryClient } from '@/pages/_app';
 import { useForm } from 'react-hook-form';
 import { useMutation } from 'react-query';
-import { CurrencyInput } from '../input/currency-input/currrency-input';
 import { SelectInput } from '../input/select-input';
 import { TextInput } from '../input/text-input';
+import { CurrencyInput } from '../input/currency-input';
+import * as yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 interface Props {
   order_id: string;
   order_code: string;
 }
 
+type FormData = {
+  type: string;
+  value: number;
+  observation: string;
+};
+
+const schema = yup.object().shape({
+  type: yup.string().required(`Obrigatório`),
+  value: yup.string().required(`Obrigatório`),
+  observation: yup.string().required(`Obrigatório`),
+});
+
 export function CreateChargeForm({ order_id, order_code }: Props) {
   const remoteSaveOrderCharge = makeRemoteSaveOrderCharge();
 
-  const { register, setValue, watch, handleSubmit } = useForm();
+  const {
+    register,
+    setValue,
+    watch,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: yupResolver(schema),
+  });
 
   const type = watch(`type`);
 
@@ -25,6 +48,10 @@ export function CreateChargeForm({ order_id, order_code }: Props) {
     {
       onSuccess: () => {
         queryClient.refetchQueries([`order`, order_code]);
+        reset();
+      },
+      onError: (error) => {
+        alert(JSON.stringify(error));
       },
     },
   );
@@ -42,35 +69,38 @@ export function CreateChargeForm({ order_id, order_code }: Props) {
   return (
     <div className="bg-white h-24 border-2 border-dotted divide-x-2 rounded-lg flex flex-row px-4 py-4 items-center justify-center">
       <form className="w-full" onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex flex-row items-center space-x-4 justify-center">
-          <div className="w-2/12">
-            <SelectInput
-              name="type"
-              label="Tipo"
-              options={[
-                { value: `TAX_REPLACEMENT`, label: `Substituição Tributária` },
-                { value: `FREIGHT`, label: `Frete` },
-                { value: `OTHER`, label: `Outro` },
-              ]}
-              value={type}
-              setValue={setValue}
-            />
-          </div>
-          <div className="w-1/12">
-            <CurrencyInput
-              handleValue={(value) => setValue(`value`, value)}
-              label="Valor"
-              type="form"
-            />
-          </div>
-          <div className="w-2/12">
-            <TextInput label="Observações" {...register(`observation`)} />
-          </div>
+        <div className="inline-flex items-center space-x-4">
+          <SelectInput
+            name="type"
+            label="Tipo"
+            options={[
+              { value: `TAX_REPLACEMENT`, label: `Substituição Tributária` },
+              { value: `FREIGHT`, label: `Frete` },
+              { value: `OTHER`, label: `Outro` },
+            ]}
+            value={type}
+            setValue={setValue}
+            error={errors.type}
+          />
+          <CurrencyInput
+            handleValue={(value) =>
+              value ? setValue(`value`, value) : setValue(`value`, 0)
+            }
+            label="Valor"
+            type="form"
+            {...register(`value`)}
+            error={errors.value}
+          />
+          <TextInput
+            label="Observações"
+            {...register(`observation`)}
+            error={errors.observation}
+          />
           <div className="w-min self-end">
-            <button className="flex flex-row text-sm items-center justify-around transition-all ease-in duration-100 rounded-lg text-white font-bold h-10 w-10 bg-green-400 hover:bg-green-300">
+            <button className="flex flex-row text-sm items-center justify-around h-10 w-10 ">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
+                className="h-5 w-5 text-green-400 hover:text-green-300"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
