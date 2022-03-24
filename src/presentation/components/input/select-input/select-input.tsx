@@ -1,10 +1,10 @@
 import React from 'react';
-import { UseFormSetValue } from 'react-hook-form';
+import { FieldError, UseFormSetValue } from 'react-hook-form';
 import Select, { Props as ReactSelectProps } from 'react-select';
 
 type SelectInputProps = ReactSelectProps & {
   label?: React.ReactNode;
-  error?: string;
+  error?: FieldError;
   setValue: UseFormSetValue<any>;
   value: string;
 };
@@ -16,7 +16,7 @@ export const SelectInput = React.forwardRef<
   {
     name = ``,
     label,
-    error,
+    error = undefined,
     isSearchable = false,
     options = [],
     setValue,
@@ -78,7 +78,7 @@ export const SelectInput = React.forwardRef<
         value={options.find((o: any) => o.value === value)}
         ref={ref}
       />
-      <small className="text-red-400">{error}</small>
+      {error && <small className="text-red-400">{error.message}</small>}
     </div>
   );
 });
